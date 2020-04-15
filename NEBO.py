@@ -10,9 +10,6 @@ from itertools import cycle
 # Bot_Prefix_Variable : 
 prfx = '.'
 
-# Bot_Token : 
-
-tkn = 'Njk4MTc1MjEwNzA0MzM4OTQ0.XpdFAw.vzNNvv2OGGgXGlGZXrLVH6TYhpY'
 # Bot_Setup :
 
 client = commands.Bot(command_prefix=prfx)
@@ -337,4 +334,4 @@ async def stop(ctx):
 
 
 
-client.run(tkn)
+client.run(os.getenv('Token'))
