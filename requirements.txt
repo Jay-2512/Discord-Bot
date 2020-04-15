@@ -1,3 +1,4 @@
 discord.py
 youtube_dl
+git+https://github.com/Rapptz/discord.py@rewrite#egg=discord.py[voice]
 colorlog
