@@ -12,8 +12,7 @@ prfx = '.'
 
 # Bot_Token : 
 
-tkn = 'Njk4MTc1MjEwNzA0MzM4OTQ0.XpC5Ew.I1_ROQMYBSQ5shEtRgwYWBt2qGw'
-
+tkn = 'Njk4MTc1MjEwNzA0MzM4OTQ0.XpdFAw.vzNNvv2OGGgXGlGZXrLVH6TYhpY'
 # Bot_Setup :
 
 client = commands.Bot(command_prefix=prfx)
