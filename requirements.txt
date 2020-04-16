@@ -1,4 +1,6 @@
-discord.py
+pynacl==1.2.1
+discord.py[voice]==1.2.5
+pip
 youtube_dl
-git+https://github.com/Rapptz/discord.py@rewrite#egg=discord.py[voice]
 colorlog
+cffi --only-binary all; sys_platform == 'win32'
