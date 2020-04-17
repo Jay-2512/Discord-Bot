@@ -176,7 +176,8 @@ async def help(ctx):
     gnrl.add_field(name = '.roll', value = 'NEBO rolls a die and tells you the output', inline = False)
     gnrl.add_field(name = '.emoji', value = 'NEBO throws a random emoji at you', inline = False)
     gnrl.add_field(name = '.clear <amount>', value = 'NEBO cleares the number of messages specified', inline = False)
-    gnrl.add_field(name = '.voicehelp', value = 'Get help about the play music options for NEBO', inline = False) 
+    gnrl.add_field(name = '.voicehelp', value = 'Get help about the play music options for NEBO', inline = False)
+    
 
     
     await ctx.send(embed = gnrl)
@@ -195,6 +196,7 @@ async def voicehelp(ctx):
     voic.add_field(name = '.pause', value = 'NEBO pauses the music you are playing', inline = False)
     voic.add_field(name = '.resume', value = 'NEBO resumes the music', inline = False)
     voic.add_field(name = '.stop', value = 'NEBO stops the music', inline = False)
+    voic.add_field(name = '.queue', value = 'To add a song to the queue', inline = False)
 
     await ctx.send(embed = voic)
     
