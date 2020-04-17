@@ -369,8 +369,6 @@ async def queue(ctx, url: str):
         q_path = os.path.abspath(os.path.realpath("Queue"))
         system(f"spotdl -ff song{q_num} -f " + '"' + q_path + '"' + " -s " + url)
 
-    await ctx.send("Adding song" + str(q_num) + " to the queue")
-
     print("Song added to queue \n")
 
 # Voice_Next :
