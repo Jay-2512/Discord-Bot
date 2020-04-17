@@ -332,5 +332,65 @@ async def stop(ctx):
         print("No audio is playing\n")
         stop.add_field(name = "NEBO", value = "NEBO is not playing any music :confused:")
         
+queues = {}
+
+@client.command(pass_context = True)
+async def queue(ctx, url: str):
+    Queue_infile = os.path.isdir("./Queue")
+    if Queue_infile is False:
+        os.mkdir("Queue")
+    DIR = os.path.abspath(os.path.realpath("Queue"))
+    q_num = len(os.listdir(DIR))
+    q_num += 1
+    add_queue = True
+    while add_queue:
+        if q_num in queues:
+            q_num += 1
+        else:
+            add_queue =  False
+            queues[q_num] = q_num
+    queue_path = os.path.abspath(os.path.realpath("Queue") + f'\song{q_num}.%(ext)s')
+
+    ydl_opts = {
+        'format': 'bestaudio/best',
+        'outtmpl': queue_path,
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',
+            'preferredquality': '192',
+        }],
+    }
+    try:
+        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+            print("Download audio now. \n")
+            ydl.download([url])
+    except:
+        print("FALLBACK : Inputted link does not look like Youtube URL Trying Spotify URL")
+        q_path = os.path.abspath(os.path.realpath("Queue"))
+        system(f"spotdl -ff song{q_num} -f " + '"' + q_path + '"' + " -s " + url)
+
+    await ctx.send("Adding song" + str(q_num) + " to the queue")
+
+    print("Song added to queue \n")
+
+# Voice_Next :
+
+@client.command(pass_context = True)
+async def next(ctx):
+
+    voice = get(client.voice_clients, guild = ctx.guild)
+
+ 
+    next = discord.Embed(title = "Skipped :fast_forward: ", colour = discord.Color.dark_magenta())
+    if voice and voice.is_playing():
+        print("Playing Next song \n")
+        voice.stop()
+        next.add_field(name = "NEBO", value = "Playing Next Song")
+        await ctx.send(embed = next)
+    else:
+        print("No audio is playing\n")
+        next.add_field(name = "NEBO", value = "NEBO is not playing any music :confused:")
+        await ctx.send(embed = next)
+        
 
 client.run(os.getenv('Token'))
