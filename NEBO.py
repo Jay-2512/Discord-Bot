@@ -197,6 +197,138 @@ async def voicehelp(ctx):
     voic.add_field(name = '.stop', value = 'NEBO stops the music', inline = False)
 
     await ctx.send(embed = voic)
+    
+# Join_Voice_Channel : 
 
+@client.command(pass_context = True)
+async def join(ctx):
+    global voice
+    channel = ctx.message.author.voice.channel
+    voice = get(client.voice_clients, guild = ctx.guild)
+    join = discord.Embed(title = "Roger That!", colour = discord.Color.dark_green())
+
+    if voice and voice.is_connected():
+        await voice.move_to(channel)
+    else:
+        voice = await channel.connect()
+
+    await voice.disconnect()
+
+    if voice and voice.is_connected():
+            await voice.move_to(channel)
+    else:
+        voice = await channel.connect()
+        print(f'NEBO is now connected to {channel} \n')
+    join.add_field(name = "NEBO is now connected to", value = f"{channel} :musical_note:")
+
+
+# Leave_Voice_Channel : 
+
+@client.command(pass_context = True)
+async def leave(ctx):
+    if voice and voice.is_connected():
+        await voice.disconnect()
+        print(f'NEBO left {channel}\n')
+ 
+    else:
+        print("NEBO is not in a voice channel.")
+
+
+# Play_Audio : 
+
+@client.command(pass_context = True)
+async def play(ctx, url : str):
+    song_there = os.path.isfile("Song.mp3")
+    play = discord.Embed(title = "Playing", colour = discord.Color.dark_purple())
+    try:
+        if song_there:
+            os.remove("Song.mp3")
+            print("Removed old song file \n")
+    except PermissionError:
+        print("Trying to delete the file but it is currently being used")
+        await ctx.send("NEBO is now playing a music..")
+        return
+    play.add_field(name = "Please Wait..", value = "Getting everything ready.")
+
+
+    voice = get(client.voice_clients, guild = ctx.guild)
+
+    ydl_opts = {
+        'format': 'bestaudio/best',
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',
+            'preferredquality': '192',
+        }],
+    }
+    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+            print("Download audio now. \n")
+            ydl.download([url])
+
+    for file in os.listdir("./"):
+        if file.endswith(".mp3"):
+            name = file
+            print(f'Renamed file {file} \n')
+            os.rename(file, "Song.mp3")
+
+    voice.play(discord.FFmpegPCMAudio("Song.mp3"), after = lambda e: print("The song has finished playing\n"))
+    voice.source = discord.PCMVolumeTransformer(voice.source)
+    voice.source.volume = 1.0
+
+    nname = name.rsplit("-", 2)
+    await ctx.send(f'Playing : {nname}')
+    print("Playing song \n")
+
+# Voice_Pause : 
+
+@client.command(pass_context = True)
+async def pause(ctx):
+
+    voice = get(client.voice_clients, guild = ctx.guild)
+    pause = discord.Embed(title = "Paused! :pause_button: ", colour = discord.Color.darker_grey())
+    if voice and voice.is_playing():
+        print("Audio Paused \n")
+        voice.pause()
+        pause.add_field(name = "NEBO", value = "Audio paused!")
+
+    else:
+        print("Music is not playing\n")
+        pause.add_field(name = "NEBO", value = "NEBO is not playing :confused:")
+ 
+
+# Voice_Resume : 
+
+@client.command(pass_context = True)
+async def resume(ctx):
+
+    voice = get(client.voice_clients, guild = ctx.guild)
+    resume = discord.Embed(title = "Resuming.. :play_pause:", colour = discord.Color.dark_orange())
+    
+    if voice and voice.is_paused():
+        print("Audio resumed \n")
+        voice.resume()
+        resume.add_field(name = "NEBO", value = "Resuming audio.")
+    
+    else:
+        print("Audio is not paused \n")
+        resume.add_field(name = "NEBO", value = 'NEBO is not playing any music :confused:')
+   
+
+# Voice_Stop :
+
+@client.command(pass_context = True)
+async def stop(ctx):
+
+    voice = get(client.voice_clients, guild = ctx.guild)
+    stop = discord.Embed(title = "Stopped :stop_button: ", colour = discord.Color.dark_magenta())
+    if voice and voice.is_playing():
+        print("Audio is stopped \n")
+        voice.stop()
+        stop.add_field(name = "NEBO", value = "Audio Stopped")
+
+    else:
+        print("No audio is playing\n")
+        stop.add_field(name = "NEBO", value = "NEBO is not playing any music :confused:")
+        
 
 client.run(os.getenv('Token'))
